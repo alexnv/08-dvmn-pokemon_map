@@ -3,9 +3,15 @@ from django.db import models  # noqa F401
 # your models here
 class Pokemon (models.Model):
     title = models.TextField()
-    photo = models.ImageField(upload_to='pokemons', blank=True)
+    photo = models.ImageField(upload_to='pokemons', null=True, blank=True)
     def __str__(self):
         return f'{self.title}'
+
+    def get_photo_url(self):
+        if self.photo:
+            return self.photo.url
+        else:
+            return None
 
 class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
