@@ -2,7 +2,7 @@ import folium
 import json
 
 from django.http import HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils.timezone import localtime
 
 from pokemon_entities.models import Pokemon, PokemonEntity
@@ -50,7 +50,7 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemon = Pokemon.objects.get(id=pokemon_id)
+    pokemon = get_object_or_404(Pokemon, id=pokemon_id)
     pokemons_entities = PokemonEntity.objects.filter(disappeared_at__gte=localtime(), appeared_at__lte=localtime(), pokemon=pokemon)
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
@@ -65,8 +65,8 @@ def show_pokemon(request, pokemon_id):
     pokemon_on_page = make_pokemon_data(pokemon, request)
     if pokemon.previous_evolution:
         pokemon_on_page["previous_evolution"] = make_pokemon_data(pokemon.previous_evolution, request)
-    if pokemon.next_evolution:
-        pokemon_on_page["next_evolution"] = make_pokemon_data(pokemon.next_evolution, request)
+    if pokemon.next_evolution.all():
+        pokemon_on_page["next_evolution"] = make_pokemon_data(pokemon.next_evolution.first(), request)
 
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(), 'pokemon': pokemon_on_page
