@@ -1,12 +1,17 @@
 from django.db import models  # noqa F401
 
+
 # your models here
-class Pokemon (models.Model):
+class Pokemon(models.Model):
     title = models.TextField()
     photo = models.ImageField(upload_to='pokemons', null=True, blank=True)
     description = models.TextField(blank=True)
     title_en = models.TextField(blank=True)
     title_jp = models.TextField(blank=True)
+    next_evolution = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, related_name= "pokemon_next_evolution_id"
+    )
+    previous_evolution = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, )
+
     def __str__(self):
         return f'{self.title}'
 
@@ -15,6 +20,7 @@ class Pokemon (models.Model):
             return self.photo.url
         else:
             return None
+
 
 class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE)

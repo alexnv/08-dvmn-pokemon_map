@@ -41,11 +41,7 @@ def show_all_pokemons(request):
     pokemons_on_page = []
     pokemons = Pokemon.objects.all()
     for pokemon in pokemons:
-        pokemons_on_page.append({
-            'pokemon_id': pokemon.id,
-            'img_url': request.build_absolute_uri(pokemon.get_photo_url()),
-            'title_ru': pokemon.title,
-        })
+        pokemons_on_page.append(make_pokemon_data(pokemon, request))
 
     return render(request, 'mainpage.html', context={
         'map': folium_map._repr_html_(),
@@ -66,7 +62,19 @@ def show_pokemon(request, pokemon_id):
         )
 
 
-    pokemon_on_page = {
+    pokemon_on_page = make_pokemon_data(pokemon, request)
+    if pokemon.previous_evolution:
+        pokemon_on_page["previous_evolution"] = make_pokemon_data(pokemon.previous_evolution, request)
+    if pokemon.next_evolution:
+        pokemon_on_page["next_evolution"] = make_pokemon_data(pokemon.next_evolution, request)
+
+    return render(request, 'pokemon.html', context={
+        'map': folium_map._repr_html_(), 'pokemon': pokemon_on_page
+    })
+
+
+def make_pokemon_data(pokemon, request):
+    return {
         'pokemon_id': pokemon.id,
         'img_url': request.build_absolute_uri(pokemon.get_photo_url()),
         'title_ru': pokemon.title,
@@ -74,6 +82,3 @@ def show_pokemon(request, pokemon_id):
         'title_en': pokemon.title_en,
         'title_jp': pokemon.title_jp,
     }
-    return render(request, 'pokemon.html', context={
-        'map': folium_map._repr_html_(), 'pokemon': pokemon_on_page
-    })
