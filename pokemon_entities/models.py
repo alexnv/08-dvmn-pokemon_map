@@ -20,7 +20,7 @@ class Pokemon(models.Model):
 
 
     def __str__(self):
-        return f'{self.title}'
+        return self.title
 
     def get_photo_url(self):
         if self.photo:
