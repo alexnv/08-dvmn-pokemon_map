@@ -4,11 +4,11 @@ from django.db import models  # noqa F401
 # your models here
 class Pokemon(models.Model):
     """Модель покемона"""
-    title = models.TextField('Название (ru)')
+    title = models.CharField ('Название (ru)', max_length=200)
     photo = models.ImageField('Изображение', upload_to='pokemons', null=True, blank=True)
     description = models.TextField('Описание', null=True, blank=True)
-    title_en = models.TextField('Название (en)', null=True, blank=True)
-    title_jp = models.TextField('Название (jp)', null=True, blank=True)
+    title_en = models.CharField ('Название (en)', null=True, blank=True, max_length=200)
+    title_jp = models.CharField ('Название (jp)', null=True, blank=True, max_length=200)
     previous_evolution = models.ForeignKey(
         'self',
         verbose_name='Из кого эволюционировал',
