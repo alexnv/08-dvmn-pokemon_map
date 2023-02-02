@@ -65,8 +65,8 @@ def show_pokemon(request, pokemon_id):
     pokemon_on_page = make_pokemon_data(pokemon, request)
     if pokemon.previous_evolution:
         pokemon_on_page["previous_evolution"] = make_pokemon_data(pokemon.previous_evolution, request)
-    if pokemon.next_evolution.all():
-        pokemon_on_page["next_evolution"] = make_pokemon_data(pokemon.next_evolution.first(), request)
+    if pokemon.next_evolutions.all():
+        pokemon_on_page["next_evolution"] = make_pokemon_data(pokemon.next_evolutions.first(), request)
 
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(), 'pokemon': pokemon_on_page

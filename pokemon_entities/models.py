@@ -12,7 +12,7 @@ class Pokemon(models.Model):
     previous_evolution = models.ForeignKey(
         'self',
         verbose_name='Из кого эволюционировал',
-        related_name='next_evolution',
+        related_name='next_evolutions',
         on_delete=models.PROTECT,
         null=True,
         blank=True,
