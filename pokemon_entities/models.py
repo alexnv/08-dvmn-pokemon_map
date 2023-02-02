@@ -1,9 +1,5 @@
 from django.db import models  # noqa F401
 
-from pokemon_entities.views import DEFAULT_IMAGE_URL
-
-
-# your models here
 class Pokemon(models.Model):
     """Модель покемона"""
     title = models.CharField ('Название (ru)', max_length=200)
@@ -27,12 +23,13 @@ class Pokemon(models.Model):
     def get_photo_url(self):
         if self.photo:
             return self.photo.url
-        return DEFAULT_IMAGE_URL
-
+        else:
+            from pokemon_entities.views import DEFAULT_IMAGE_URL
+            return  DEFAULT_IMAGE_URL
 
 class PokemonEntity(models.Model):
     """Появление покемона на карте"""
-    pokemon = models.ForeignKey(Pokemon, verbose_name='Покемон', on_delete=models.CASCADE, null=True, related_name="pokemon")
+    pokemon = models.ForeignKey(Pokemon, verbose_name='Покемон', on_delete=models.CASCADE, null=True, related_name="entities")
     lat = models.FloatField('Широта')
     lon = models.FloatField('Долгота')
     appeared_at = models.DateTimeField('Появляется', null=True)
