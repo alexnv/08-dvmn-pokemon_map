@@ -1,5 +1,7 @@
 from django.db import models  # noqa F401
 
+from pokemon_entities.views import DEFAULT_IMAGE_URL
+
 
 # your models here
 class Pokemon(models.Model):
@@ -25,8 +27,7 @@ class Pokemon(models.Model):
     def get_photo_url(self):
         if self.photo:
             return self.photo.url
-        else:
-            return None
+        return DEFAULT_IMAGE_URL
 
 
 class PokemonEntity(models.Model):
